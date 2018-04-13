@@ -1,8 +1,11 @@
 package com.example.piotrek.restapiclient;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -16,7 +19,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SelectActivity extends AppCompatActivity {
+public class SelectActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+    public static final String CITY_VARIABLE_NAME = "city";
     private ListView cityList;
 
     @Override
@@ -24,6 +28,7 @@ public class SelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
         cityList = findViewById(R.id.city_list);
+        cityList.setOnItemClickListener(this);
 
         MyApiEndpointInterface myApiEndpointInterface = MyApiEndpointInterface.retrofit.create(MyApiEndpointInterface.class);
         Call<List<City>> call = myApiEndpointInterface.loadCities();
@@ -47,5 +52,13 @@ public class SelectActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent = new Intent();
+        intent.setClass(this, WeatherActivity.class);
+        intent.putExtra(CITY_VARIABLE_NAME, (String) cityList.getItemAtPosition(i));
+        startActivity(intent);
     }
 }

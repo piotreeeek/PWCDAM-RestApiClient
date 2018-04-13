@@ -1,6 +1,7 @@
 package com.example.piotrek.restapiclient;
 
 import com.example.piotrek.restapiclient.models.City;
+import com.example.piotrek.restapiclient.models.Weather;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -10,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 interface MyApiEndpointInterface {
     String BASE_URL = "http://165.227.154.243:8081";
@@ -24,4 +26,7 @@ interface MyApiEndpointInterface {
 
     @GET("cities/")
     Call<List<City>> loadCities();
+
+    @GET("city/{city}/")
+    Call<Weather> loadCity(@Path("city") String city);
 }
