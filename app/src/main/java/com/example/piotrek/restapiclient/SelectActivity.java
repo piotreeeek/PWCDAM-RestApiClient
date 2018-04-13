@@ -1,104 +1,51 @@
 package com.example.piotrek.restapiclient;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.example.piotrek.restapiclient.models.City;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SelectActivity extends AppCompatActivity {
-    TextView txtJson;
-    ProgressDialog pd;
+    private ListView cityList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
-        txtJson = (TextView) findViewById(R.id.jsonText);
-    }
+        cityList = findViewById(R.id.city_list);
 
-    public void listUsers(View view) {
-        new UsersTask().execute("http://192.168.0.103:8081/listUsers");
-    }
+        MyApiEndpointInterface myApiEndpointInterface = MyApiEndpointInterface.retrofit.create(MyApiEndpointInterface.class);
+        Call<List<City>> call = myApiEndpointInterface.loadCities();
+        call.enqueue(new Callback<List<City>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<City>> call, @NonNull Response<List<City>> response) {
+                List values = new ArrayList();
+                if(response.body() != null) {
+                    for (City city : Objects.requireNonNull(response.body())) {
+                        values.add(city.getName());
 
-
-    private class UsersTask extends AsyncTask<String, String, String> {
-
-
-
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            pd = new ProgressDialog(SelectActivity.this);
-            pd.setMessage("Please wait");
-            pd.setCancelable(false);
-            pd.show();
-        }
-
-        protected String doInBackground(String... params) {
-
-
-            HttpURLConnection connection = null;
-            BufferedReader reader = null;
-
-            try {
-                URL url = new URL(params[0]);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-
-
-                InputStream stream = connection.getInputStream();
-
-                reader = new BufferedReader(new InputStreamReader(stream));
-
-                StringBuffer buffer = new StringBuffer();
-                String line = "";
-
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line + "\n");
-                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
-
-                }
-
-                return buffer.toString();
-
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();
-                }
-                try {
-                    if (reader != null) {
-                        reader.close();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, values);
+                    cityList.setAdapter(adapter);
                 }
             }
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if (pd.isShowing()) {
-                pd.dismiss();
+            @Override
+            public void onFailure(@NonNull Call<List<City>> call, @NonNull Throwable t) {
+
             }
-            txtJson.setText(result);
-        }
+        });
     }
 }
