@@ -4,19 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="com.example.piotrek.restapiclient.SelectActivity">
+    tools:context="com.example.piotrek.restapiclient.SelectActivity"
+    android:id="@+id/select_layout">
 
     <TextView
         android:id="@+id/select_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/select_city"/>
-    <ListView
-        android:id="@+id/city_list"
-        android:layout_below="@id/select_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
 
 </RelativeLayout>

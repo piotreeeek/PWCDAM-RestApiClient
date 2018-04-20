@@ -8,8 +8,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.piotrek.restapiclient.models.City;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +26,15 @@ import retrofit2.Response;
 public class SelectActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     public static final String CITY_VARIABLE_NAME = "city";
     private ListView cityList;
+    private RelativeLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
-        cityList = findViewById(R.id.city_list);
+        cityList = new ListView(this);
         cityList.setOnItemClickListener(this);
+        mainLayout = findViewById(R.id.select_layout);
 
         MyApiEndpointInterface myApiEndpointInterface = MyApiEndpointInterface.retrofit.create(MyApiEndpointInterface.class);
         Call<List<City>> call = myApiEndpointInterface.loadCities();
@@ -44,12 +50,31 @@ public class SelectActivity extends AppCompatActivity implements AdapterView.OnI
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, values);
                     cityList.setAdapter(adapter);
+                    RelativeLayout.LayoutParams cityListParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                            RelativeLayout.LayoutParams.MATCH_PARENT);
+                    cityListParams.addRule(RelativeLayout.BELOW, R.id.select_text_view);
+                    cityList.setLayoutParams(cityListParams);
+                    mainLayout.addView(cityList);
+                }
+                else{
+                    this.setError(R.string.error_loading_city);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<City>> call, @NonNull Throwable t) {
+                this.setError(R.string.error_loading_city);
+            }
 
+            private void setError(int resid) {
+                TextView errorText = new TextView(getApplicationContext());
+                errorText.setText(resid);
+
+                RelativeLayout.LayoutParams errorTextParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                errorTextParams.addRule(RelativeLayout.BELOW, R.id.select_text_view);
+                errorText.setLayoutParams(errorTextParams);
+                mainLayout.addView(errorText);
             }
         });
     }

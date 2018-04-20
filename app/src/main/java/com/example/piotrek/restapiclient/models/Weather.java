@@ -22,7 +22,7 @@ public class Weather {
     private float temp;
     @SerializedName("pressure")
     @Expose
-    private int pressure;
+    private float pressure;
     @SerializedName("humidity")
     @Expose
     private int humidity;
@@ -38,9 +38,6 @@ public class Weather {
     @SerializedName("deg")
     @Expose
     private int deg;
-    @SerializedName("visibility")
-    @Expose
-    private int visibility;
 
     public int getId() {
         return id;
@@ -82,11 +79,11 @@ public class Weather {
         this.temp = temp;
     }
 
-    public int getPressure() {
+    public float getPressure() {
         return pressure;
     }
 
-    public void setPressure(int pressure) {
+    public void setPressure(float pressure) {
         this.pressure = pressure;
     }
 
@@ -128,14 +125,6 @@ public class Weather {
 
     public void setDeg(int deg) {
         this.deg = deg;
-    }
-
-    public int getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(int visibility) {
-        this.visibility = visibility;
     }
 
 }

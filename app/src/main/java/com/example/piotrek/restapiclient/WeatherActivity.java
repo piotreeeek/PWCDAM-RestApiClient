@@ -2,6 +2,7 @@ package com.example.piotrek.restapiclient;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.piotrek.restapiclient.models.City;
@@ -34,13 +35,18 @@ public class WeatherActivity extends AppCompatActivity {
         call.enqueue(new Callback<Weather>() {
             @Override
             public void onResponse(Call<Weather> call, Response<Weather> response) {
-                Weather weather = response.body();
-                temp.setText(Float.toString(weather.getTemp()));
+                if (response.body() != null){
+                    Weather weather = response.body();
+                    temp.setText(weather.getDescription());
+                }else{
+                    temp.setText(R.string.error_loading_weather);
+                }
             }
 
             @Override
             public void onFailure(Call<Weather> call, Throwable t) {
-
+                Log.d("dupa", t.getStackTrace().toString());
+                temp.setText(R.string.error_loading_weather);
             }
         });
     }
