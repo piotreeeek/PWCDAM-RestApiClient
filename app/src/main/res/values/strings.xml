@@ -3,4 +3,10 @@
     <string name="select_city">Wybierz miasto:</string>
     <string name="error_loading_weather">Brak infomracji pogodowych!!!</string>
     <string name="error_loading_city">Bład ładowania miast!!!</string>
+    <string name="icon_name">wetaher icon</string>
+    <string name="weather">Pogoda: %s</string>
+    <string name="temp">Temperatura: %f °C</string>
+    <string name="humidity">Wilgotność: %d%%</string>
+    <string name="pressure">Ciśnienie: %f hPa</string>
+    <string name="wind">Prędkość wiatru: %f m/s</string>
 </resources>

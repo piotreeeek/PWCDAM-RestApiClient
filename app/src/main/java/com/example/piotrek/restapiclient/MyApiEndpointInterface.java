@@ -14,7 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 interface MyApiEndpointInterface {
-    String BASE_URL = "http://165.227.154.243:8081";
+    String BASE_URL = "http://139.59.150.98:8081";
     String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
     Gson gson = new GsonBuilder()
             .setDateFormat(DATE_FORMAT)
